@@ -1,0 +1,48 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+  }
+  
+  .container {
+    text-align: center;
+  }
+  
+  canvas {
+    border: 1px solid black;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .buttons {
+    margin-top: 20px;
+  }
+  
+  button {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #startBtn {
+    background-color: green;
+    color: white;
+  }
+  
+  #stopBtn {
+    background-color: yellow;
+    color: black;
+  }
+  
+  #resetBtn {
+    background-color: red;
+    color: white;
+  }
+  

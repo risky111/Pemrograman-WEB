@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stopwatch</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <canvas id="stopwatchCanvas" width="700" height="400"></canvas>
+    <div class="buttons">
+      <button id="startBtn">Start Timer</button>
+      <button id="stopBtn">Stop Timer</button>
+      <button id="resetBtn">Reset Timer</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("stopwatchCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let startTime = null;
+    let elapsedTime = 0;
+    let timerInterval = null;
+
+    function drawTime() {
+      let time = elapsedTime;
+
+      const hours = Math.floor(time / 3600000);
+      time %= 3600000;
+      const minutes = Math.floor(time / 60000);
+      time %= 60000;
+      const seconds = Math.floor(time / 1000);
+      const milliseconds = Math.floor((time % 1000) / 10); // 2-digit
+
+      const h = hours.toString().padStart(2, '0');
+      const m = minutes.toString().padStart(2, '0');
+      const s = seconds.toString().padStart(2, '0');
+      const ms = milliseconds.toString().padStart(2, '0');
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.font = "bold 60px Arial";
+      ctx.textBaseline = "middle";
+
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+
+      // Text fragments with styles
+      const fragments = [
+        { text: h, color: "blue" },
+        { text: ":", color: "black" },
+        { text: m, color: "orange" },
+        { text: ":", color: "black" },
+        { text: s, color: "green" },
+        { text: ":", color: "black" },
+        { text: ms, color: "red" }
+      ];
+
+      // Measure total width
+      let totalWidth = 0;
+      fragments.forEach(f => {
+        totalWidth += ctx.measureText(f.text).width;
+      });
+
+      // Start drawing from (center - half total width)
+      let x = centerX - totalWidth / 2;
+
+      // Draw each fragment
+      fragments.forEach(f => {
+        ctx.fillStyle = f.color;
+        ctx.fillText(f.text, x, centerY);
+        x += ctx.measureText(f.text).width;
+      });
+    }
+
+    function startTimer() {
+      if (!timerInterval) {
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(() => {
+          elapsedTime = Date.now() - startTime;
+          drawTime();
+        }, 10);
+      }
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    function resetTimer() {
+      stopTimer();
+      elapsedTime = 0;
+      drawTime();
+    }
+
+    document.getElementById("startBtn").addEventListener("click", startTimer);
+    document.getElementById("stopBtn").addEventListener("click", stopTimer);
+    document.getElementById("resetBtn").addEventListener("click", resetTimer);
+
+    drawTime();
+  </script>
+</body>
+</html>

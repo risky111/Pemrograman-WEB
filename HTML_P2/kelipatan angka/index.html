@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Kelipatan Angka</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="canvas">
+        <h1 class="judul">Masukkan Kelipatan</h1>
+        <form id="kelipatanForm">
+            <label for="kelipatan">Masukkan kelipatan:</label>
+            <input type="number" id="kelipatan" name="kelipatan" required>
+            <button type="submit" id="submitBtn">Kirim</button>
+        </form>
+
+        <div id="hasil"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById("kelipatanForm");
+        const hasil = document.getElementById("hasil");
+        const input = document.getElementById("kelipatan");
+        const btn = document.getElementById("submitBtn");
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const nilai = parseInt(input.value);
+            if (isNaN(nilai) || nilai <= 0) return;
+
+            let table = "<h2>Kelipatan dari " + nilai + "</h2>";
+            table += `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Angka</th>
+                            <th>Kelipatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+            for (let i = 1; i <= 20; i++) {
+                table += `
+                    <tr>
+                        <td class="angka">${i}</td>
+                        <td class="kelipatan">${i * nilai}</td>
+                    </tr>`;
+            }
+
+            table += "</tbody></table>";
+            hasil.innerHTML = table;
+
+            input.setAttribute("readonly", true);
+            btn.disabled = true;
+            btn.style.backgroundColor = "grey";
+            btn.style.cursor = "not-allowed";
+        });
+    </script>
+</body>
+</html>

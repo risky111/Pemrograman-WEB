@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kalender</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <button onclick="navigateMonth('prev')">&lt;</button>
+      <h2 id="month-year">April 2025</h2>
+      <button onclick="navigateMonth('next')">&gt;</button>
+    </div>
+    <table class="calendar-table">
+      <thead>
+        <tr>
+          <th>Minggu</th>
+          <th>Senin</th>
+          <th>Selasa</th>
+          <th>Rabu</th>
+          <th>Kamis</th>
+          <th>Jumat</th>
+          <th>Sabtu</th>
+        </tr>
+      </thead>
+      <tbody id="calendar-body"></tbody>
+    </table>
+  </div>
+
+  <script>
+    let currentMonth, currentYear;
+
+    function generateCalendar(month, year) {
+      const today = new Date();
+      const thisDay = today.getDate();
+      const thisMonth = today.getMonth();
+      const thisYear = today.getFullYear();
+
+      const monthNames = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+      ];
+
+      document.getElementById("month-year").innerText = monthNames[month] + " " + year;
+
+      const firstDay = new Date(year, month, 1).getDay(); // 0 = Minggu
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let date = 1;
+      let table = "";
+
+      for (let i = 0; i < 6; i++) {
+        let row = "<tr>";
+        for (let j = 0; j < 7; j++) {
+          if (i === 0 && j < firstDay) {
+            row += "<td></td>";
+          } else if (date > daysInMonth) {
+            row += "<td></td>";
+          } else {
+            const isToday = date === thisDay && month === thisMonth && year === thisYear;
+            row += `<td class="${isToday ? "today" : ""}">${date}</td>`;
+            date++;
+          }
+        }
+        row += "</tr>";
+        table += row;
+        if (date > daysInMonth) break;
+      }
+
+      document.getElementById("calendar-body").innerHTML = table;
+      currentMonth = month;
+      currentYear = year;
+    }
+
+    function navigateMonth(direction) {
+      let newMonth = currentMonth;
+      let newYear = currentYear;
+
+      if (direction === "prev") {
+        newMonth--;
+        if (newMonth < 0) {
+          newMonth = 11;
+          newYear--;
+        }
+      } else {
+        newMonth++;
+        if (newMonth > 11) {
+          newMonth = 0;
+          newYear++;
+        }
+      }
+
+      generateCalendar(newMonth, newYear);
+    }
+
+    window.onload = function () {
+      const today = new Date();
+      generateCalendar(today.getMonth(), today.getFullYear());
+    };
+  </script>
+</body>
+</html>
